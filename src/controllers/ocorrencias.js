@@ -2,7 +2,7 @@
 const db = require('../dataBase/connection');
 
 module.exports = {
-    async listarUsuarios(request, response) {
+    async listarOcorrencias(request, response) {
         try {
             return response.status(200).json({
                 sucesso: true,
