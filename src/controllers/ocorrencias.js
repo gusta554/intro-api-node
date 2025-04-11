@@ -4,10 +4,15 @@ const db = require('../dataBase/connection');
 module.exports = {
     async listarOcorrencias(request, response) {
         try {
+            const sql = 'SELECT oco_id, trans_id, oco_valor, oco_situacao, oco_data FROM ocorrencias;'
+            
+            const [rows] = await db.query(sql);
+
             return response.status(200).json({
                 sucesso: true,
                 mensagem: 'Lista de ocorrencias.',
-                dados: null
+                itens: rows.length,
+                dados: rows
             });
         } catch (error) {
             return response.status(500).json({
