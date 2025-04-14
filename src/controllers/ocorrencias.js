@@ -24,6 +24,26 @@ module.exports = {
     },
     async cadastrarOcorrencias(request, response) {
         try {
+            const{ oco_id, trans_id, oco_valor, oco_situacao, oco_data} = request.body
+            const usu_ativo = 1;
+
+            //instrução SQL
+            const sql = `
+            ISERT INTO usuarios
+                (usu_nome, usu_email, usu_dt_nasc, usu_senha, usu_tipo, usu_ativo, usu_cpf)
+            VALUES
+                (?, ?, ?, ?, ?, ?, ?);
+            `;
+
+            //definição dos dadosa serem inseridos em um array
+            const values = [usu_nome, usu_email, usu_dt_nasc, usu_senha, usu_tipo, usu_ativo, usu_cpf];
+
+            //execução da instrução sql passando os parâmetros
+            const [result] = await db.query(sql, values);
+            
+            //identificação do ID do registro inserido
+            const usu_id = result.insertId;
+
             return response.status(200).json({
                 sucesso: true,
                 mensagem: 'Lista de ocorrencias.',
