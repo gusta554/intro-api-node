@@ -24,30 +24,32 @@ module.exports = {
     },
     async cadastrarOcorrencias(request, response) {
         try {
-            const{ oco_id, trans_id, oco_valor, oco_situacao, oco_data} = request.body
-            const usu_ativo = 1;
+            const {trans_id, oco_valor, oco_situacao, oco_data} = request.body;
 
             //instrução SQL
             const sql = `
-            ISERT INTO usuarios
-                (usu_nome, usu_email, usu_dt_nasc, usu_senha, usu_tipo, usu_ativo, usu_cpf)
+            INSERT INTO ocorrencias
+                (trans_id, oco_valor, oco_situacao, oco_data)
             VALUES
-                (?, ?, ?, ?, ?, ?, ?);
+                (?, ?, ?, ?);
             `;
 
             //definição dos dadosa serem inseridos em um array
-            const values = [usu_nome, usu_email, usu_dt_nasc, usu_senha, usu_tipo, usu_ativo, usu_cpf];
+            const values = [trans_id, oco_valor, oco_situacao, oco_data];
 
             //execução da instrução sql passando os parâmetros
             const [result] = await db.query(sql, values);
             
             //identificação do ID do registro inserido
-            const usu_id = result.insertId;
-
+            const dados = {
+            id: result.insertId,
+            oco_valor,
+            oco_data,
+            };
             return response.status(200).json({
                 sucesso: true,
-                mensagem: 'Lista de ocorrencias.',
-                dados: null
+                mensagem: 'cadastro de ocorrencias.',
+                dados: dados
             });
         } catch (error) {
             return response.status(500).json({
@@ -59,6 +61,9 @@ module.exports = {
     },
     async editarOcorrencias(request, response) {
         try {
+            // parâmetro recebidos pelo corpo da requisição
+            const {trans_id, oco_valor, oco_situacao, oco_data}
+            // parâmetro recebido pela URL via params ex: /
             return response.status(200).json({
                 sucesso: true,
                 mensagem: 'Lista de ocorrencias.',
