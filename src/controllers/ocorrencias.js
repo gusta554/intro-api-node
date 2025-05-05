@@ -61,21 +61,34 @@ module.exports = {
     },
     async editarOcorrencias(request, response) {
         try {
-            // parâmetro recebidos pelo corpo da requisição
-            const {trans_id, oco_valor, oco_situacao, oco_data}
-            // parâmetro recebido pela URL via params ex: /
+            // pârametro recebido pelo corpo da requisição
+            const { oco_valor, oco_situacao, oco_data } = request.body;
+            //pârametro recebido pela URL via params ex: /
+            const { oco_id } = request.params;
+            //insruções SQL
+            const sql = `UPDATE ocorrencias SET oco_valor = ?,
+             oco_situacao = ?, oco_data = ?
+             WHERE oco_id = ?;`;
+            // preparo do array com dados que serão atualizados
+            const values = [oco_valor, oco_situacao, oco_data, oco_id]
+            // execução e obtenção de confirmação da atualização realizada
+            const atualizaDados = await db.query(sql, values);
+
+
             return response.status(200).json({
                 sucesso: true,
-                mensagem: 'Lista de ocorrencias.',
-                dados: null
+                mensagem: `ocorrencias ${oco_id} atualizado com sucesso!`,
+                dados: atualizaDados[0].affectedRows
+                // mensSql: atualizaDados
             });
         } catch (error) {
             return response.status(500).json({
                 sucesso: false,
                 mensagem: 'Erro na ocorrencia.',
-                erro: error.mensagem
+                dados: error.mensagem
             });
         }
+    
     },
     async apagarOcorrencias(request, response) {
         try {
