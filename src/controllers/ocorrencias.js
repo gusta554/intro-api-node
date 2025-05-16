@@ -74,7 +74,7 @@ module.exports = {
             // execução e obtenção de confirmação da atualização realizada
             const atualizaDados = await db.query(sql, values);
 
-
+ 
             return response.status(200).json({
                 sucesso: true,
                 mensagem: `ocorrencias ${oco_id} atualizado com sucesso!`,
